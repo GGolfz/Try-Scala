@@ -12,7 +12,7 @@ object Main extends App {
   println(number)
 
   def add(x: Int, y: Int): Int = {
-    return x + y
+    x + y
   }
 
   def minus(x: Int, y:Int) = x - y // Shorthand with implicit return type
@@ -32,4 +32,26 @@ object Main extends App {
     println("Array length is 2")
   }
   println("Array length is not 2: " + (if(arr.length == 2) "YEP!" else "NOPE"))
+
+  try {
+    val value = x / 0
+  } catch {
+    case x: ArithmeticException => println("Arithmetic Exception")
+    case r: RuntimeException => println("Run Time Exception")
+  }
+
+  var i = 0
+  while(i < 10) {
+    println(i*i)
+    i+=1
+  }
+  i = 0
+
+  do {
+    println(i*i)
+    i+=1
+  } while(i < 10)
+
+
+
 }
