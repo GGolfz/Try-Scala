@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0614e8f4-6527-42ee-97e7-142add880777" name="Changes" comment="" />
+    <list default="true" id="0614e8f4-6527-42ee-97e7-142add880777" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Main.scala" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -55,7 +58,7 @@
       <updated>1654569497404</updated>
       <workItem from="1654569500634" duration="35000" />
       <workItem from="1654569539249" duration="75000" />
-      <workItem from="1654569624924" duration="1809000" />
+      <workItem from="1654569624924" duration="4220000" />
     </task>
     <servers />
   </component>
