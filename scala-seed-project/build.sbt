@@ -12,6 +12,7 @@ lazy val root = (project in file("."))
     libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.6.9",
     libraryDependencies += "com.typesafe.akka" %% "akka-stream" % "2.6.9",
     libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.2.9",
+      libraryDependencies += "io.spray" %%  "spray-json" % "1.3.6",
   )
 
 // See https://www.scala-sbt.org/1.x/docs/Using-Sonatype.html for instructions on how to publish to Sonatype.
