@@ -1,11 +1,13 @@
 package example
 
 import akka.actor.{ActorSystem, ClassicActorSystemProvider}
-import akka.stream.{Materializer, SystemMaterializer}
-import akka.stream.scaladsl.{Flow, Sink, Source}
+import akka.stream.{Materializer, OverflowStrategy, SystemMaterializer}
+import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
 
 import scala.collection.immutable.{Stream => ColStream}
 import scala.concurrent.Future
+import scala.language.postfixOps
+import scala.util.{Failure, Success}
 object Stream extends App {
 
         implicit val system = ActorSystem("FirstPrinciples")
@@ -42,9 +44,48 @@ object Stream extends App {
         val nameSource = Source(names)
         val filterFlow = Flow[String].filter(x => x.length > 5)
         val takeNameFlow = Flow[String].take(2)
-        nameSource.via(filterFlow).via(takeNameFlow).to(foreachSink).run()
+//        nameSource.vaia(filterFlow).via(takeNameFlow).to(foreachSink).run()
 
+        // Materialize Stream
 
+        val simpleSource = Source(1 to 5)
+        val simpleFlow = Flow[Int].map(x=>x+1)
+        val simpleSink = Sink.foreach[Int](println)
+        val simpleGraph = simpleSource.viaMat(simpleFlow)(Keep.right).toMat(simpleSink)(Keep.right)
+//        simpleGraph.run().onComplete {
+//                case Success(_) => println("Success")
+//                case Failure(exception) => println(s"Stream failed with: $exception")
+//        }
 
+        // Async Boundary
+
+        val complexFlow1 = Flow[Int].map{ x =>
+          Thread.sleep(1000)
+          x + 1
+        }
+        val complexFlow2 = Flow[Int].map{ x =>
+          Thread.sleep(1000)
+          x*10
+        }
+//        simpleSource.via(complexFlow1).async.via(complexFlow2).async.to(simpleSink).run()
+
+        // Action to Back Pressure
+
+        val fastSource = Source(1 to 1000)
+        val slowSink = Sink.foreach[Int]{ x=>
+          Thread.sleep(1000)
+          println(s"Sink: ${x}")
+        }
+        val newSimpleFlow = Flow[Int].map { x=>
+          println(s"Incoming: ${x}")
+          x + 1
+        }
+//        fastSource.async.via(newSimpleFlow).async.to(slowSink).run() // This cause back pressure
+        val bufferFlow = newSimpleFlow.buffer(10, OverflowStrategy.dropHead)
+//        fastSource.async.via(bufferFlow).async.to(slowSink).run() // Fix back pressure but it drops some buffer
+
+        // Throttling
+        import scala.concurrent.duration._
+        fastSource.throttle(10,1 second).runWith(Sink.foreach(println))
 
 }
